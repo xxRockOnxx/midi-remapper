@@ -1,0 +1,26 @@
+{
+  "name": "midi-remapper",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/eslint-module": "^4.1.0",
+    "@nuxtjs/tailwindcss": "^6.8.0",
+    "@types/node": "^18.16.19",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "daisyui": "^3.2.1",
+    "eslint": "^8.44.0",
+    "eslint-plugin-vue": "^9.15.1",
+    "nuxt": "^3.6.2",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@tonejs/midi": "^2.0.28"
+  }
+}
