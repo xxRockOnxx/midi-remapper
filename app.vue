@@ -3,19 +3,19 @@
     <div
       style="background-image: linear-gradient(135deg, rgb(60, 140, 231) 10%, rgb(0, 234, 255) 100%);"
     >
-      <div class="container mx-auto p-10 xl:p-20">
-        <h1 class="text-4xl text-white font-medium">
+      <div class="container mx-auto p-6 sm:p-8 lg:p-12 xl:p-20">
+        <h1 class="text-xl text-white font-medium sm:text-2xl xl:text-4xl">
           Free Online MIDI Remapper
         </h1>
 
-        <p class="mt-5 text-white text-2xl leading-loose">
+        <p class="mt-2 text-white leading-loose sm:text-lg sm:leading-loose xl:mt-4 xl:text-2xl xl:leading-loose">
           A free online tool to remap MIDI notes.<br>
           This can't be any more simple and easy to use.
         </p>
       </div>
     </div>
 
-    <div class="p-10 container mx-auto xl:p-20">
+    <div class="p-6 container mx-auto sm:p-8 lg:p-12 xl:p-20">
       <div class="form-control max-w-md">
         <label
           for="file"
