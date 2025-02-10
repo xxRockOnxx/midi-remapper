@@ -8,7 +8,7 @@
           Free Online MIDI Remapper
         </h1>
 
-        <p class="mt-2 text-white leading-loose sm:text-lg sm:leading-loose xl:mt-4 xl:text-2xl xl:leading-loose">
+        <p class="text-white leading-relaxed lg:text-lg xl:mt-2 xl:text-xl">
           A free online tool to remap MIDI notes.<br>
           This can't be any more simple and easy to use.
         </p>
