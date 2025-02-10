@@ -52,3 +52,12 @@ export function transformMapping(
     }),
   );
 }
+
+// This should do it for now.
+// Ideally we would have a mapping of constants to names.
+export function getName(constant: string): string {
+  return constant
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};

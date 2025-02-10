@@ -124,6 +124,7 @@
         <thead>
           <tr>
             <th>Original Note</th>
+            <th>Source Instrument</th>
             <th>Remapped Note</th>
           </tr>
         </thead>
@@ -131,7 +132,7 @@
         <tbody>
           <tr v-if="Object.keys(mapping).length === 0">
             <td
-              colspan="2"
+              colspan="3"
               class="p-2 text-center"
             >
               No notes available
@@ -145,6 +146,9 @@
             class="hover"
           >
             <td>{{ midiToNote(original) }} ({{ original }})</td>
+            <td>
+              {{ appliedSource ? getPresetInstrument(appliedSource, original) : '-' }}
+            </td>
             <td>
               <select
                 v-model="mapping[original]"
@@ -178,7 +182,7 @@
 </template>
 
 <script setup lang="ts">
-import {midiToNote, transformMapping} from '@/utils';
+import {getName, midiToNote, transformMapping} from '@/utils';
 import { Midi } from '@tonejs/midi';
 import { GENERAL_MIDI, MM_GGD, OKW_AR_GGD, type Mapping } from './mapping';
 
@@ -186,6 +190,7 @@ const filename = ref('')
 const midi = ref<null | Midi>(null)
 const selectedChannel = ref(-1)
 
+const appliedSource = ref<string|null>(null)
 const sourceMapping = ref('gm')
 const targetMapping = ref('mm-ggd')
 
@@ -267,6 +272,17 @@ function applyPresetToMIDI() {
   }
 
   mapping.value = transformMapping(mapping.value, sourceMap, targetMap)
+  appliedSource.value = sourceMapping.value
+}
+
+function getPresetInstrument(preset: string, note: number): string {
+  const map = getMappingFromPreset(preset)
+
+  if (!map) {
+    throw new Error('Invalid preset')
+  }
+
+  return getName(map[note])
 }
 
 function download() {
