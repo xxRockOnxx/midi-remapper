@@ -98,33 +98,26 @@
         </select>
       </div>
 
+      <MappingSelect
+        v-model="sourceMapping"
+        class="mt-10 "
+        type="source"
+      />
+
+      <MappingSelect
+        v-model="targetMapping"
+        class="mt-10"
+        type="target"
+      />
+
       <div class="mt-10">
-        <label
-          for="preset"
-          class="label"
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="applyPresetToMIDI"
         >
-          <span class="label-text">Mapping Preset</span>
-        </label>
-
-        <div class="join">
-          <select
-            id="preset"
-            class="join-item select select-bordered"
-            disabled
-          >
-            <option :value="-1">
-              Coming Soon
-            </option>
-          </select>
-
-          <button
-            type="button"
-            class="join-item btn"
-            disabled
-          >
-            Save Preset
-          </button>
-        </div>
+          Apply Mapping to MIDI
+        </button>
       </div>
 
       <table class="mt-10 table table-lg">
@@ -151,7 +144,7 @@
             :key="original"
             class="hover"
           >
-            <td>{{ midiToNoteName(original) }} ({{ original }})</td>
+            <td>{{ midiToNote(original) }} ({{ original }})</td>
             <td>
               <select
                 v-model="mapping[original]"
@@ -162,7 +155,7 @@
                   :key="number - 1"
                   :value="number - 1"
                 >
-                  {{ midiToNoteName(number - 1) }} ({{ number - 1 }})
+                  {{ midiToNote(number - 1) }} ({{ number - 1 }})
                 </option>
               </select>
             </td>
@@ -185,12 +178,16 @@
 </template>
 
 <script setup lang="ts">
-import midiToNoteName from '@/utils';
+import {midiToNote, transformMapping} from '@/utils';
 import { Midi } from '@tonejs/midi';
+import { GENERAL_MIDI, MM_GGD, OKW_AR_GGD, type Mapping } from './mapping';
 
 const filename = ref('')
 const midi = ref<null | Midi>(null)
 const selectedChannel = ref(-1)
+
+const sourceMapping = ref('gm')
+const targetMapping = ref('mm-ggd')
 
 const sortedChannels = computed(() => {
   if (!midi.value) {
@@ -202,7 +199,7 @@ const sortedChannels = computed(() => {
 
 const mapping = ref<Record<number, number>>({})
 
-function generateMapping() {
+function generateMappingFromMIDI() {
   if (!midi.value) {
     mapping.value = {}
     return
@@ -222,8 +219,8 @@ function generateMapping() {
   mapping.value = Object.fromEntries(notes)
 }
 
-watch(midi, generateMapping)
-watch(selectedChannel, generateMapping)
+watch(midi, generateMappingFromMIDI)
+watch(selectedChannel, generateMappingFromMIDI)
 
 function onFileChange(evt: Event) {
   const file = (evt.target as HTMLInputElement).files![0]
@@ -237,6 +234,39 @@ function onFileChange(evt: Event) {
       alert('Error parsing MIDI file')
       console.error(error)
     })
+}
+
+function getMappingFromPreset(preset: string): Mapping|undefined {
+  switch (preset) {
+    case 'gm':
+      return GENERAL_MIDI
+    case 'mm-ggd':
+      return MM_GGD
+    case 'okw-ar-ggd':
+      return OKW_AR_GGD
+    default:
+      return undefined
+  }
+}
+
+function applyPresetToMIDI() {
+  if (Object.keys(mapping.value).length === 0) {
+    return
+  }
+
+  const sourceMap = getMappingFromPreset(sourceMapping.value)
+
+  if (!sourceMap) {
+    throw new Error('Invalid source mapping')
+  }
+
+  const targetMap = getMappingFromPreset(targetMapping.value)
+
+  if (!targetMap) {
+    throw new Error('Invalid target mapping')
+  }
+
+  mapping.value = transformMapping(mapping.value, sourceMap, targetMap)
 }
 
 function download() {
