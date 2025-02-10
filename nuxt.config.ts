@@ -16,4 +16,5 @@ export default defineNuxtConfig({
   },
 
   modules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss'],
+  compatibilityDate: '2025-02-10',
 })
