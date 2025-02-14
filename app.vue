@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <div class="p-6 container mx-auto sm:p-8 lg:p-12 xl:p-20">
+    <div class="p-6 container mx-auto sm:p-8 lg:px-12 xl:px-20">
       <div class="form-control max-w-md">
         <label
           for="file"
