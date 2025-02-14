@@ -25,7 +25,7 @@ export function transformMapping(
   input: Record<number, number>,
   source: Mapping,
   target: Mapping,
-) {
+): Record<number, number> {
   // Loop once and create a map of target notes
   // instead of looping every time we need to convert.
   const targetNoteMap = new Map<string, number>();
@@ -42,13 +42,13 @@ export function transformMapping(
       // Source map does not have an instrument for this note.
       // Keep the original key:value pair.
       if (!instrumentName) {
-        return [note, originalTargetNote];
+        return [noteAsNum, originalTargetNote];
       }
 
       // Source map has an instrument for this note.
       // Check if the target map has a note for this instrument.
       // If not, keep the original key:value pair.
-      return [note, targetNoteMap.get(instrumentName) ?? originalTargetNote];
+      return [noteAsNum, targetNoteMap.get(instrumentName) ?? originalTargetNote];
     }),
   );
 }
