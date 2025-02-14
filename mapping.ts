@@ -76,7 +76,7 @@ const CUICA_OPEN = "cuica_open";
 const TRIANGLE_MUTE = "triangle_mute";
 const TRIANGLE_OPEN = "triangle_open";
 
-export interface Mapping {
+export interface Instruments {
   [note: number]: string;
 }
 

@@ -1,5 +1,5 @@
 import type { Midi } from "@tonejs/midi";
-import type { Mapping } from "./mapping";
+import type { Instruments } from "./mapping";
 
 const NOTE_NAMES = [
   'C',
@@ -22,8 +22,12 @@ export function midiToNote(midi: number): string {
   return `${NOTE_NAMES[note]}${octave}`;
 }
 
-export function generateMappingFromMIDI(midi: Midi, channel = -1): Record<number, number> {
-  const output: Record<number, number> = {};
+export interface Mapping {
+  [note: number]: number;
+}
+
+export function generateMappingFromMIDI(midi: Midi, channel = -1): Mapping {
+  const output: Mapping = {};
   const notes = midi.tracks
     .filter((track) => {
       // Not filtering by channel
@@ -43,16 +47,16 @@ export function generateMappingFromMIDI(midi: Midi, channel = -1): Record<number
 }
 
 export function transformMapping(
-  input: Record<number, number>,
-  source: Mapping,
-  target: Mapping,
-): Record<number, number> {
+  input: Mapping,
+  source: Instruments,
+  target: Instruments,
+): Mapping {
   // Loop once and create a map of target notes
   // instead of looping every time we need to convert.
-  const targetNoteMap = new Map<string, number>();
+  const targetInstrumentNote = new Map<string, number>();
 
   for (const [note, instrument] of Object.entries(target)) {
-    targetNoteMap.set(instrument, parseInt(note, 10));
+    targetInstrumentNote.set(instrument, parseInt(note, 10));
   }
 
   return Object.fromEntries(
@@ -69,12 +73,12 @@ export function transformMapping(
       // Source map has an instrument for this note.
       // Check if the target map has a note for this instrument.
       // If not, keep the original key:value pair.
-      return [noteAsNum, targetNoteMap.get(instrumentName) ?? originalTargetNote];
+      return [noteAsNum, targetInstrumentNote.get(instrumentName) ?? originalTargetNote];
     }),
   );
 }
 
-export function remapMIDI(midi: Midi, mapping: Record<number, number>): Midi {
+export function remapMIDI(midi: Midi, mapping: Mapping): Midi {
   const newMidi = midi.clone();
 
   newMidi.tracks.forEach((track) => {

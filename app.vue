@@ -81,13 +81,13 @@
       </div>
 
       <MappingSelect
-        v-model="sourceMapping"
+        v-model="sourceInstruments"
         class="mt-10 "
         type="source"
       />
 
       <MappingSelect
-        v-model="targetMapping"
+        v-model="targetInstruments"
         class="mt-10"
         type="target"
       />
@@ -164,17 +164,17 @@
 </template>
 
 <script setup lang="ts">
-import {generateMappingFromMIDI, getName, midiToNote, remapMIDI, transformMapping} from '@/utils';
+import { generateMappingFromMIDI, getName, midiToNote, remapMIDI, transformMapping } from '@/utils';
 import { Midi } from '@tonejs/midi';
-import { GENERAL_MIDI, MM_GGD, OKW_AR_GGD, type Mapping } from './mapping';
+import { GENERAL_MIDI, MM_GGD, OKW_AR_GGD, type Instruments } from './mapping';
 
 const filename = ref('')
 const midi = ref<null | Midi>(null)
 const selectedChannel = ref(-1)
 
 const appliedSource = ref<string|null>(null)
-const sourceMapping = ref('gm')
-const targetMapping = ref('mm-ggd')
+const sourceInstruments = ref('gm')
+const targetInstruments = ref('mm-ggd')
 
 const sortedChannels = computed(() => {
   if (!midi.value) {
@@ -208,7 +208,7 @@ function onFileChange(evt: Event) {
     })
 }
 
-function getMappingFromPreset(preset: string): Mapping|undefined {
+function getPresetInstruments(preset: string): Instruments|undefined {
   switch (preset) {
     case 'gm':
       return GENERAL_MIDI
@@ -226,24 +226,24 @@ function applyPresetToMIDI() {
     return
   }
 
-  const sourceMap = getMappingFromPreset(sourceMapping.value)
+  const source = getPresetInstruments(sourceInstruments.value)
 
-  if (!sourceMap) {
+  if (!source) {
     throw new Error('Invalid source mapping')
   }
 
-  const targetMap = getMappingFromPreset(targetMapping.value)
+  const target = getPresetInstruments(targetInstruments.value)
 
-  if (!targetMap) {
+  if (!target) {
     throw new Error('Invalid target mapping')
   }
 
-  mapping.value = transformMapping(mapping.value, sourceMap, targetMap)
-  appliedSource.value = sourceMapping.value
+  mapping.value = transformMapping(mapping.value, source, target)
+  appliedSource.value = sourceInstruments.value
 }
 
 function getPresetInstrument(preset: string, note: number): string {
-  const map = getMappingFromPreset(preset)
+  const map = getPresetInstruments(preset)
 
   if (!map) {
     throw new Error('Invalid preset')
