@@ -127,52 +127,55 @@
         </button>
       </div>
 
-      <table class="mt-10 table table-lg">
-        <thead>
-          <tr>
-            <th>Original Note</th>
-            <th>Source Instrument</th>
-            <th>Remapped Note</th>
-          </tr>
-        </thead>
+      <div class="mt-10 overflow-x-auto">
+        <table class="table table-lg table-zebra">
+          <thead>
+            <tr>
+              <th>Original Note</th>
+              <th>Source Instrument</th>
+              <th>Remapped Note</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr v-if="Object.keys(mapping).length === 0">
-            <td
-              colspan="3"
-              class="p-2 text-center"
-            >
-              No notes available
-            </td>
-          </tr>
-
-          <tr
-            v-for="(remapped, original) in mapping"
-            v-else
-            :key="original"
-            class="hover"
-          >
-            <td>{{ midiToNote(original) }} ({{ original }})</td>
-            <td>
-              {{ appliedSource ? getPresetInstrument(appliedSource, original) : '-' }}
-            </td>
-            <td>
-              <select
-                v-model="mapping[original]"
-                class="select select-bordered w-full"
+          <tbody>
+            <tr v-if="Object.keys(mapping).length === 0">
+              <td
+                colspan="3"
+                class="p-2 text-center"
               >
-                <option
-                  v-for="number in 128"
-                  :key="number - 1"
-                  :value="number - 1"
+                No notes available
+              </td>
+            </tr>
+
+            <tr
+              v-for="(remapped, original) in mapping"
+              v-else
+              :key="original"
+              class="hover"
+            >
+              <td>{{ midiToNote(original) }} ({{ original }})</td>
+              <td>
+                {{ appliedSource ? getPresetInstrument(appliedSource, original) : '-' }}
+              </td>
+              <td>
+                <select
+                  v-model="mapping[original]"
+                  class="select select-bordered w-full"
                 >
-                  {{ midiToNote(number - 1) }} ({{ number - 1 }})
-                </option>
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  <option
+                    v-for="number in 128"
+                    :key="number - 1"
+                    :value="number - 1"
+                  >
+                    {{ midiToNote(number - 1) }} ({{ number - 1 }})
+                  </option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
 
       <div class="mt-10 text-center">
         <button
