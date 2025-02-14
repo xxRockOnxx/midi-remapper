@@ -164,7 +164,7 @@
 </template>
 
 <script setup lang="ts">
-import {generateMappingFromMIDI, getName, midiToNote, transformMapping} from '@/utils';
+import {generateMappingFromMIDI, getName, midiToNote, remapMIDI, transformMapping} from '@/utils';
 import { Midi } from '@tonejs/midi';
 import { GENERAL_MIDI, MM_GGD, OKW_AR_GGD, type Mapping } from './mapping';
 
@@ -257,13 +257,7 @@ function download() {
     return
   }
 
-  const newMidi = toRaw(midi.value).clone()
-
-  newMidi.tracks.forEach((track) => {
-    track.notes.forEach((note) => {
-      note.midi = mapping.value[note.midi]
-    })
-  })
+  const newMidi = remapMIDI(midi.value, mapping.value)
 
   const blob = new Blob([newMidi.toArray()], {
     type: 'audio/midi',

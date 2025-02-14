@@ -74,6 +74,18 @@ export function transformMapping(
   );
 }
 
+export function remapMIDI(midi: Midi, mapping: Record<number, number>): Midi {
+  const newMidi = midi.clone();
+
+  newMidi.tracks.forEach((track) => {
+    track.notes.forEach((note) => {
+      note.midi = mapping[note.midi] ?? note.midi;
+    })
+  })
+
+  return newMidi;
+}
+
 // This should do it for now.
 // Ideally we would have a mapping of constants to names.
 export function getName(constant: string): string {

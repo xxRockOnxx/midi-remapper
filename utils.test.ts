@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { generateMappingFromMIDI, transformMapping } from './utils'
+import { generateMappingFromMIDI, remapMIDI, transformMapping } from './utils'
 import { Midi } from '@tonejs/midi'
 
 test('it should remap correctly', () => {
@@ -76,7 +76,7 @@ test('it should keep original note if not in source or target mapping', () => {
   expect(output[1], 'Should keep original note 3').toBe(1)
 })
 
-test('generate mapping from MIDI', () => {
+test('it should generate mapping from MIDI', () => {
   const midi = new Midi()
   const track = midi.addTrack()
 
@@ -96,4 +96,30 @@ test('generate mapping from MIDI', () => {
 
   expect(mapping[60], 'Should have note 60').toBe(60)
   expect(mapping[61], 'Should have note 61').toBe(61)
+})
+
+test('it should generate remapped MIDI', () => {
+  const midi = new Midi()
+  const track = midi.addTrack()
+
+  track.addNote({
+    midi: 60,
+    time: 0,
+    duration: 1,
+  })
+
+  track.addNote({
+    midi: 61,
+    time: 1,
+    duration: 1,
+  })
+
+  const mapping = {
+    60: 1,
+  }
+
+  const newMidi = remapMIDI(midi, mapping)
+
+  expect(newMidi.tracks[0].notes[0].midi, 'Should remap 60 to 1').toBe(1)
+  expect(newMidi.tracks[0].notes[1].midi, 'Should keep 61').toBe(61)
 })
