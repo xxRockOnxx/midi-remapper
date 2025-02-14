@@ -15,6 +15,6 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss', 'nuxt-umami'],
   compatibilityDate: '2025-02-10',
 })

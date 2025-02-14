@@ -301,5 +301,14 @@ function download() {
   a.click()
 
   URL.revokeObjectURL(url)
+
+  umTrackEvent('download', {
+    source: appliedSource,
+    target: appliedTarget,
+  })
 }
+
+onMounted(() => {
+  setTimeout(() => umTrackView(), 500)
+})
 </script>
