@@ -164,7 +164,7 @@
 </template>
 
 <script setup lang="ts">
-import {getName, midiToNote, transformMapping} from '@/utils';
+import {generateMappingFromMIDI, getName, midiToNote, transformMapping} from '@/utils';
 import { Midi } from '@tonejs/midi';
 import { GENERAL_MIDI, MM_GGD, OKW_AR_GGD, type Mapping } from './mapping';
 
@@ -186,28 +186,13 @@ const sortedChannels = computed(() => {
 
 const mapping = ref<Record<number, number>>({})
 
-function generateMappingFromMIDI() {
+watch([midi, selectedChannel], () => {
   if (!midi.value) {
     mapping.value = {}
-    return
+  } else {
+    mapping.value = generateMappingFromMIDI(midi.value, selectedChannel.value)
   }
-
-  const notes: Array<[number, number]> = midi.value.tracks
-    .filter((track) => {
-      if (selectedChannel.value === -1) {
-        return true
-      }
-
-      return track.channel === selectedChannel.value
-    })
-    .flatMap((track) => track.notes)
-    .map((note) => [note.midi, note.midi])
-
-  mapping.value = Object.fromEntries(notes)
-}
-
-watch(midi, generateMappingFromMIDI)
-watch(selectedChannel, generateMappingFromMIDI)
+})
 
 function onFileChange(evt: Event) {
   const file = (evt.target as HTMLInputElement).files![0]

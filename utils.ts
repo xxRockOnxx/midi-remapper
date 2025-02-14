@@ -1,3 +1,4 @@
+import type { Midi } from "@tonejs/midi";
 import type { Mapping } from "./mapping";
 
 const NOTE_NAMES = [
@@ -19,6 +20,26 @@ export function midiToNote(midi: number): string {
   const note = midi % 12;
   const octave = Math.floor(midi / 12) - 1;
   return `${NOTE_NAMES[note]}${octave}`;
+}
+
+export function generateMappingFromMIDI(midi: Midi, channel = -1): Record<number, number> {
+  const output: Record<number, number> = {};
+  const notes = midi.tracks
+    .filter((track) => {
+      // Not filtering by channel
+      if (channel === -1) {
+        return true
+      }
+
+      return track.channel === channel
+    })
+    .flatMap((track) => track.notes);
+
+  for (const note of notes) {
+    output[note.midi] = note.midi;
+  }
+
+  return output;
 }
 
 export function transformMapping(
