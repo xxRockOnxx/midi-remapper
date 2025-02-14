@@ -13,7 +13,7 @@
           This can't be any more simple and easy to use.
         </p>
 
-        <div class="mt-2 space-y-2 xl:mt-4">
+        <div class="mt-2 xl:mt-4">
           <a
             href="https://github.com/xxRockOnxx/midi-remapper"
             target="_blank"
@@ -32,6 +32,10 @@
               Github
             </div>
           </a>
+
+          <div class="mt-2 text-white text-sm bg-info-content inline-block px-4 py-2 rounded-lg shadow-lg max-w-md leading-relaxed xl:mt-4">
+            Let me know if you have problems or suggestions by creating an issue on Github by clicking the link above.
+          </div>
         </div>
       </div>
     </div>
