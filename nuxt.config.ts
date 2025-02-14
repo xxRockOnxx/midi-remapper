@@ -10,6 +10,10 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content: 'A free online tool to remap MIDI notes.',
+        },
+        {
+          name: 'google-site-verification',
+          content: 'CZUVt9lZVrvrRQtotNlynFOmTvvrasfVi8FEKgYPb_s',
         }
       ]
     },
