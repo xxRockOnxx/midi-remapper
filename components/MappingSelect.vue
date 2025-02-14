@@ -1,7 +1,7 @@
 <template>
   <label class="form-control max-w-md w-full">
     <div class="label">
-      <div class="label-text">{{ label }} mapping</div>
+      <div class="label-text">{{ label }} library</div>
     </div>
 
     <select
@@ -20,6 +20,8 @@
 </template>
 
 <script lang="ts" setup>
+import { getLibraryName } from '~/utils';
+
 const props = defineProps({
   exclude: {
     type: String as PropType<string | null>,
@@ -36,15 +38,15 @@ const value = defineModel<string>()
 
 const options = [
   {
-    name: 'General MIDI',
+    name: getLibraryName('gm'),
     value: 'gm'
   },
   {
-    name: 'GGD Modern and Massive - GGD',
+    name: getLibraryName('mm-ggd'),
     value: 'mm-ggd'
   },
   {
-    name: 'GGD One Kit Wonder: Aggressive Rock - GGD',
+    name: getLibraryName('okw-ar-ggd'),
     value: 'okw-ar-ggd'
   },
 ]

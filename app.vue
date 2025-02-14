@@ -54,7 +54,7 @@
         >
       </div>
 
-      <div class="mt-10 form-control max-w-md">
+      <div class="mt-4 form-control max-w-md">
         <label
           class="label"
           for="channel"
@@ -78,24 +78,45 @@
             {{ channel }}
           </option>
         </select>
+
+        <div class="mt-2 text-sm text-gray-500">
+          If you select "All Channels", all channels will be remapped.
+        </div>
       </div>
 
       <MappingSelect
         v-model="sourceInstruments"
-        class="mt-10 "
+        class="mt-4"
         type="source"
       />
 
       <MappingSelect
         v-model="targetInstruments"
-        class="mt-10"
+        class="mt-4"
         type="target"
       />
 
-      <div class="mt-10">
+      <div class="mt-4">
+        <div
+          v-if="!appliedSource || !appliedTarget"
+          class="text-sm text-gray-500"
+        >
+          No mapping applied
+        </div>
+
+        <div
+          v-else
+          class="text-sm text-gray-500"
+        >
+          Applied mapping:
+          <span class="font-bold">{{ getLibraryName(appliedSource) }}</span>
+          <span> -> </span>
+          <span class="font-bold">{{ getLibraryName(appliedTarget) }}</span>
+        </div>
+
         <button
           type="button"
-          class="btn btn-secondary"
+          class="mt-4 btn btn-secondary"
           @click="applyPresetToMIDI"
         >
           Apply Mapping to MIDI
@@ -164,7 +185,7 @@
 </template>
 
 <script setup lang="ts">
-import { generateMappingFromMIDI, getName, midiToNote, remapMIDI, transformMapping } from '@/utils';
+import { generateMappingFromMIDI, getLibraryName, getName, midiToNote, remapMIDI, transformMapping } from '@/utils';
 import { Midi } from '@tonejs/midi';
 import { GENERAL_MIDI, MM_GGD, OKW_AR_GGD, type Instruments } from './mapping';
 
@@ -173,6 +194,7 @@ const midi = ref<null | Midi>(null)
 const selectedChannel = ref(-1)
 
 const appliedSource = ref<string|null>(null)
+const appliedTarget = ref<string|null>(null)
 const sourceInstruments = ref('gm')
 const targetInstruments = ref('mm-ggd')
 
@@ -240,6 +262,7 @@ function applyPresetToMIDI() {
 
   mapping.value = transformMapping(mapping.value, source, target)
   appliedSource.value = sourceInstruments.value
+  appliedTarget.value = targetInstruments.value
 }
 
 function getPresetInstrument(preset: string, note: number): string {

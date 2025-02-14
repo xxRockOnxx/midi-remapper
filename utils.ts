@@ -98,3 +98,16 @@ export function getName(constant: string): string {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 };
+
+export function getLibraryName(constant: string) {
+  switch (constant) {
+    case 'gm':
+      return 'General MIDI';
+    case 'mm-ggd':
+      return 'GGD Modern and Massive - GGD';
+    case 'okw-ar-ggd':
+      return 'GGD One Kit Wonder: Aggressive Rock - GGD'
+    default:
+      return 'Unknown';
+  }
+}
