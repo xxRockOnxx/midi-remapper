@@ -19,6 +19,11 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss', 'nuxt-umami'],
+  modules: [
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/tailwindcss',
+    'nuxt-umami',
+    'nuxt-clarity-analytics',
+  ],
   compatibilityDate: '2025-02-10',
 })
