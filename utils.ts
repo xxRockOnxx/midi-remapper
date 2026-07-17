@@ -104,9 +104,9 @@ export function getLibraryName(constant: string) {
     case 'gm':
       return 'General MIDI';
     case 'mm-ggd':
-      return 'GGD Modern and Massive - GGD';
+      return 'GGD Modern & Massive';
     case 'okw-ar-ggd':
-      return 'GGD One Kit Wonder: Aggressive Rock - GGD'
+      return 'GGD One Kit Wonder: Aggressive Rock'
     default:
       return 'Unknown';
   }

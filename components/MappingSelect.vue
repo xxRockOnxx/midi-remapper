@@ -1,12 +1,10 @@
 <template>
-  <label class="form-control max-w-md w-full">
-    <div class="label">
-      <div class="label-text">{{ label }} library</div>
-    </div>
+  <label class="block min-w-0">
+    <span class="silkscreen">{{ label }}</span>
 
     <select
       v-model="value"
-      class="select select-bordered"
+      class="select-hw mt-1.5"
     >
       <option
         v-for="option in options"
@@ -23,42 +21,18 @@
 import { getLibraryName } from '~/utils';
 
 const props = defineProps({
-  exclude: {
-    type: String as PropType<string | null>,
-    default: null
-  },
-
   type: {
-    type: String as PropType<string>,
+    type: String as PropType<'source' | 'target'>,
     required: true
   }
 })
 
 const value = defineModel<string>()
 
-const options = [
-  {
-    name: getLibraryName('gm'),
-    value: 'gm'
-  },
-  {
-    name: getLibraryName('mm-ggd'),
-    value: 'mm-ggd'
-  },
-  {
-    name: getLibraryName('okw-ar-ggd'),
-    value: 'okw-ar-ggd'
-  },
-]
+const options = ['gm', 'mm-ggd', 'okw-ar-ggd'].map((id) => ({
+  name: getLibraryName(id),
+  value: id,
+}))
 
-const label = computed(() => {
-  switch (props.type) {
-    case 'source':
-      return 'Source'
-    case 'target':
-      return 'Target'
-    default:
-      return 'Unknown'
-  }
-})
+const label = computed(() => props.type === 'source' ? 'Source kit' : 'Target kit')
 </script>
